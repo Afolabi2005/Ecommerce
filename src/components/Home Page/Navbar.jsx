@@ -21,8 +21,8 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
 
   const NavLink = [
     { id: 1, name: "Shop", path: "/shop" },
-    { id: 2, name: "Stories" },
-    { id: 3, name: "About" },
+    { id: 2, name: "Stories", path:"/stories" },
+    { id: 3, name: "About", path: "/about" },
   ];
   function handleNavigate(path) {
     navigate(path);
