@@ -92,7 +92,7 @@ const Address = () => {
                       }))
                     }
                     placeholder="Enter First Name"
-                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                   />
                   <input
                     type="text"
@@ -105,7 +105,7 @@ const Address = () => {
                       }))
                     }
                     placeholder="Enter Last Name"
-                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                   />
                 </div>
                 <input
@@ -119,7 +119,7 @@ const Address = () => {
                     }))
                   }
                   placeholder="Address"
-                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                 />
                 <input
                   type="text"
@@ -132,7 +132,7 @@ const Address = () => {
                     }))
                   }
                   placeholder="Apartment, suite, etc (optional)"
-                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                 />
                 <input
                   type="text"
@@ -145,10 +145,10 @@ const Address = () => {
                     }))
                   }
                   placeholder="City"
-                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                 />
                 <div className="flex justify-between gap-2">
-                  <div className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD]">
+                  <div className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black">
                     <select
                       value={shippingInfo.country}
                       onChange={(e) =>
@@ -170,7 +170,7 @@ const Address = () => {
                       <option value="27">+27</option>
                     </select>
                   </div>
-                  <div className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD]">
+                  <div className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black">
                     <select
                       value={shippingInfo.city}
                       onChange={(e) =>
@@ -203,14 +203,14 @@ const Address = () => {
                       }))
                     }
                     placeholder="Zipcode"
-                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                    className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                   />
                 </div>
                 <input
                   type="text"
                   required
                   placeholder="Optional"
-                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-[#A9ABBD] py-4 px-2"
+                  className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
                 />{" "}
                 <div className="flex gap-2 mt-4">
                   <input
