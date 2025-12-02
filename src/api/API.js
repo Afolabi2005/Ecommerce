@@ -39,7 +39,6 @@ export const signupUser = async (credentials) => {
       method: 'POST',
       headers: {
         'accept': 'application/json',
-        'Authorization': 'Bearer Token',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(credentials),
