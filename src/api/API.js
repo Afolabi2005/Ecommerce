@@ -18,7 +18,9 @@ export const loginUser = async (credentials) => {
         'Authorization': 'Bearer Token',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify({
+        requestType: "inbound",
+        data: credentials}),
     });
 
     if (!response.ok) {
