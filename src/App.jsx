@@ -10,6 +10,7 @@ import Shipping from "./components/Shop Page/Shipping";
 import Payment from "./components/Shop Page/Payment";
 import Stories from "./components/Home Page/Stories";
 import About from "./components/Home Page/About";
+import Login from "./components/Home Page/Login";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/shop" element={<Shop_Home />} />
         <Route path="/stories" element={<Stories />} />
         <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/address" element={<Address />} />

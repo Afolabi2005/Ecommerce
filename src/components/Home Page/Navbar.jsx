@@ -108,7 +108,7 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
                       ) : (
                         <img src={CartBlack} alt="cart" />
                       )}
-                      <p className="text-[17px] text-left ml-4">Login</p>
+                      <p className="text-[17px] text-left ml-4" onClick={() => navigate('/login')}>Login</p>
                     </div>
                   </ul>
                 </div>

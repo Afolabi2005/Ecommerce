@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
 import { ProductCard } from "./Product";
+import axios from "axios";
 
 const Shop_Home = () => {
   const [active, setActive] = React.useState("all");
@@ -63,7 +64,6 @@ const Shop_Home = () => {
     "T-Shirts",
     "Pants & Jeans",
   ];
-
 
   function handleCategories(category) {
     setCheckedCategories((prev) =>
