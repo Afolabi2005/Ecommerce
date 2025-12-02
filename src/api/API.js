@@ -45,9 +45,12 @@ export const signupUser = async (credentials) => {
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
-        "X-API-Key": import.meta.env.VITE_API_KEY,
+        "X-Api-Key": import.meta.env.VITE_API_KEY, // backend requires this
       },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify({
+        requestType: "inbound", // ✅ required field
+        data: credentials, // ✅ wrap user data inside "data"
+      }),
     });
 
     if (!response.ok) {
