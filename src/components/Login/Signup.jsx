@@ -1,31 +1,35 @@
-import React from "react";
+import React, { useState} from "react";
 import Navbar from "../Home Page/Navbar";
+import { signupUser } from "../../api/API";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [signupInfo, setSignupInfo] = React.useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
+  const [signupInfo, setSignupInfo] = useState({
+    first_name: "",
+    last_name: "",
+    phoneNo: "",
     email: "",
     password: "",
+    role: "",
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = React.useState({});
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
-    if (!signupInfo.firstName.match(/^[A-Za-z]{2,}$/)) {
+    if (!signupInfo.first_name.match(/^[A-Za-z]{2,}$/)) {
       newErrors.firstName = "First name must be at least 2 letters.";
     }
-    if (!signupInfo.lastName.match(/^[A-Za-z]{2,}$/)) {
-      newErrors.lastName = "Last name must be at least 2 letters.";
+    if (!signupInfo.last_name.match(/^[A-Za-z]{2,}$/)) {
+      newErrors.last_name = "Last name must be at least 2 letters.";
     }
-    if (!signupInfo.phone.match(/^\+?[0-9]{10,15}$/)) {
+    if (!signupInfo.phoneNo.match(/^\+?[0-9]{10,15}$/)) {
       newErrors.phone = "Phone number must be 10–15 digits.";
     }
     if (!signupInfo.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -45,10 +49,42 @@ const Signup = () => {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      // ✅ Submit form or call API
-      console.log("Form submitted successfully:", signupInfo);
-    }
+    setIsLoading(true)
+    setError(null)
+
+    try {
+          const response = await signupUser({
+            email: signupInfo.email,
+            password: signupInfo.password,
+            first_name: signupInfo.first_name,
+            last_name: signupInfo.last_name,
+            phoneNo: signupInfo.phoneNo,
+            role: signupInfo.role
+          });
+    
+          console.log("Signup successful:", response);
+    
+          
+          if (response.access_token || response.token) {
+
+            localStorage.setItem(
+              "auth_token",
+              response.access_token || response.token
+            );
+    
+            if (response.user) {
+              localStorage.setItem("user_data", JSON.stringify(response.user));
+            }
+            navigate("/");
+          } else {
+            setError("No authentication token received");
+          }
+        } catch (err) {
+          setError(err.message || "Signup failed. Please check your credentials.");
+          console.error("register error:", err);
+        } finally {
+          setIsLoading(false);
+        }
   };
 
   return (
@@ -64,45 +100,48 @@ const Signup = () => {
             <div className="flex flex-col w-full">
               <input
                 type="text"
-                value={signupInfo.firstName}
+                value={signupInfo.first_name}
                 onChange={(e) =>
-                  setSignupInfo((s) => ({ ...s, firstName: e.target.value }))
+                  setSignupInfo((s) => ({ ...s, first_name: e.target.value }))
                 }
                 placeholder="Enter First Name"
+                disabled={isLoading}
                 className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
               />
               {errors.firstName && (
-                <p className="text-red-500 text-sm">{errors.firstName}</p>
+                <p className="text-red-500 text-sm">{errors.first_name}</p>
               )}
             </div>
 
             <div className="flex flex-col w-full">
               <input
                 type="text"
-                value={signupInfo.lastName}
+                value={signupInfo.last_name}
                 onChange={(e) =>
-                  setSignupInfo((s) => ({ ...s, lastName: e.target.value }))
+                  setSignupInfo((s) => ({ ...s, last_name: e.target.value }))
                 }
                 placeholder="Enter Last Name"
+                disabled={isLoading}
                 className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm">{errors.lastName}</p>
+              {errors.last_name && (
+                <p className="text-red-500 text-sm">{errors.last_name}</p>
               )}
             </div>
           </div>
 
           <input
             type="tel"
-            value={signupInfo.phone}
+            value={signupInfo.phoneNo}
             onChange={(e) =>
-              setSignupInfo((s) => ({ ...s, phone: e.target.value }))
+              setSignupInfo((s) => ({ ...s, phoneNo: e.target.value }))
             }
             placeholder="Phone number"
+            disabled={isLoading}
             className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
           />
           {errors.phone && (
-            <p className="text-red-500 text-sm">{errors.phone}</p>
+            <p className="text-red-500 text-sm">{errors.phoneNo}</p>
           )}
 
           <input
@@ -112,6 +151,7 @@ const Signup = () => {
               setSignupInfo((s) => ({ ...s, email: e.target.value }))
             }
             placeholder="example@mail.com"
+            disabled={isLoading}
             className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
           />
           {errors.email && (
@@ -125,6 +165,7 @@ const Signup = () => {
               setSignupInfo((s) => ({ ...s, password: e.target.value }))
             }
             placeholder="Password"
+            disabled={isLoading}
             className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
           />
           {errors.password && (
@@ -138,12 +179,33 @@ const Signup = () => {
               setSignupInfo((s) => ({ ...s, confirmPassword: e.target.value }))
             }
             placeholder="Confirm Password"
+            disabled={isLoading}
             className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
           )}
-
+          <div className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black">
+            <select
+              value={signupInfo.role}
+              onChange={(e) =>
+                setSignupInfo((s) => ({
+                  ...s,
+                  role: e.target.value,
+                }))
+              }
+              className="py-3 px-2 outline-none w-[90%] text-[14px] text-[#00000070] font-normal"
+              name="role"
+              id="role"
+              disabled={isLoading}
+            >
+              <option value="" disabled selected>
+                Role
+              </option>
+              <option value="vendor">Vendor</option>
+              <option value="customer">Customer</option>
+            </select>
+          </div>
           <button
             type="submit"
             className="w-full outline-none text-[16px] font-semibold indent-4 border border-[#A9ABBD] bg-black text-white py-3 px-2"

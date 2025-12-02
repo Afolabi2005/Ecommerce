@@ -13,7 +13,7 @@ const Address = () => {
 
   const [shippingInfo, setShippingInfo] = React.useState({
     firstName: "",
-    lastName: "",
+    last_name: "",
     address: "",
     landmark: "",
     city: "",
@@ -26,7 +26,7 @@ const Address = () => {
     e.preventDefault();
     if (
       !shippingInfo.firstName ||
-      !shippingInfo.lastName ||
+      !shippingInfo.last_name ||
       !shippingInfo.address ||
       !shippingInfo.city ||
       !shippingInfo.landmark ||
@@ -97,11 +97,11 @@ const Address = () => {
                   <input
                     type="text"
                     required
-                    value={shippingInfo.lastName}
+                    value={shippingInfo.last_name}
                     onChange={(e) =>
                       setShippingInfo((s) => ({
                         ...s,
-                        lastName: e.target.value,
+                        last_name: e.target.value,
                       }))
                     }
                     placeholder="Enter Last Name"

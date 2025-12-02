@@ -32,3 +32,27 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+export const signupUser = async (credentials) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': 'Bearer Token',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Signup failed with status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Signup API error:', error);
+    throw error;
+  }
+};
