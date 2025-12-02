@@ -76,7 +76,7 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
                 </span>
               </div>
             )}
-            <p className="text-[17px]">Login</p>
+            <p className="text-[17px]" onClick={() => navigate('/login')}>Login</p>
           </div>
           <div className="md:hidden">
             <button
