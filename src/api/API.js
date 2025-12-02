@@ -12,25 +12,28 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const loginUser = async (credentials) => {
   try {
     const response = await fetch(`${API_BASE_URL}/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'accept': 'application/json',
-        'Authorization': 'Bearer Token',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        Authorization: "Bearer Token",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         requestType: "inbound",
-        data: credentials}),
+        data: credentials,
+      }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || `Login failed with status: ${response.status}`);
+      throw new Error(
+        errorData.message || `Login failed with status: ${response.status}`
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Login API error:', error);
+    console.error("Login API error:", error);
     throw error;
   }
 };
@@ -38,23 +41,25 @@ export const loginUser = async (credentials) => {
 export const signupUser = async (credentials) => {
   try {
     const response = await fetch(`${API_BASE_URL}/signup`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-API-Key': import.meta.env.VITE_API_KEY,
+        accept: "application/json",
+        "Content-Type": "application/json",
+        "X-API-Key": import.meta.env.VITE_API_KEY,
       },
       body: JSON.stringify(credentials),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || `Signup failed with status: ${response.status}`);
+      throw new Error(
+        errorData.message || `Signup failed with status: ${response.status}`
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Signup API error:', error);
+    console.error("Signup API error:", error);
     throw error;
   }
 };
