@@ -10,7 +10,8 @@ import Shipping from "./components/Shop Page/Shipping";
 import Payment from "./components/Shop Page/Payment";
 import Stories from "./components/Home Page/Stories";
 import About from "./components/Home Page/About";
-import Login from "./components/Home Page/Login";
+import Login from "./components/Login/Login";
+import Signup from "./components/Login/Signup";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/stories" element={<Stories />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/address" element={<Address />} />
