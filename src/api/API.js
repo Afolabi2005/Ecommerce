@@ -15,12 +15,12 @@ export const loginUser = async (credentials) => {
       method: "POST",
       headers: {
         accept: "application/json",
-        Authorization: "Bearer Token",
         "Content-Type": "application/json",
+        "X-Api-Key": import.meta.env.VITE_API_KEY, // ✅ include API key
       },
       body: JSON.stringify({
-        requestType: "inbound",
-        data: credentials,
+        requestType: "inbound", // ✅ required field
+        data: credentials, // ✅ wrap user data inside "data"
       }),
     });
 
