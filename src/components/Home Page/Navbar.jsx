@@ -18,14 +18,29 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
       setCart(savedCart ? JSON.parse(savedCart) : []);
     }
 
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("auth_token");
     setIsLoggedIn(!!token);
   }, [setCart]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setIsLoggedIn(false);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/logout`, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          "X-Api-Key": import.meta.env.VITE_API_KEY,
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+      });
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_data");
+      setIsLoggedIn(false);
+      navigate("/login");
+    }
   };
 
   const NavLink = [
@@ -91,9 +106,15 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
                 </span>
               </div>
             )}
-            <p className="text-[17px]" onClick={() => navigate("/login")}>
-              Login
-            </p>
+            {isLoggedIn ? (
+              <p className="text-[17px]" onClick={handleLogout}>
+                Logout
+              </p>
+            ) : (
+              <p className="text-[17px]" onClick={() => navigate("/login")}>
+                Login
+              </p>
+            )}
           </div>
           <div className="md:hidden">
             <button

@@ -8,7 +8,7 @@ const Login = () => {
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
-    rememberMe: false
+    rememberMe: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,6 @@ const Login = () => {
       localStorage.removeItem("password");
     }
 
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(loginInfo.email)) {
       setError("Please enter a valid email address");
@@ -48,20 +47,13 @@ const Login = () => {
       console.log("Login successful:", response);
 
       // Handle successful login - adjust based on your API response
-      if (response.data.accessToken || response.token) {
-        // Store token
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("auth_token", response.data.accessToken);
         localStorage.setItem(
-          "auth_token",
-          response.data.accessToken || response.token
+          "user_data",
+          JSON.stringify(response.data.userData)
         );
-
-        // Store user data if available
-        if (response.user) {
-          localStorage.setItem("user_data", JSON.stringify(response.user));
-        }
-
-        // Redirect to dashboard or home page
-        navigate("/dashboard"); // or '/'
+        navigate("/");
       } else {
         setError("No authentication token received");
       }
@@ -128,7 +120,7 @@ const Login = () => {
                     setLoginInfo((s) => ({
                       ...s,
                       rememberMe: e.target.checked,
-                  }))
+                    }))
                   }
                   id="remember"
                   disabled={isLoading}
@@ -154,7 +146,13 @@ const Login = () => {
             </button>
           </form>
           <p className="text-[14px] font-normal mt-4 text-[#A9ABBD]">
-            or <span className="font-bold cursor-pointer" onClick={() => navigate('/signup')}>create an account </span>
+            or{" "}
+            <span
+              className="font-bold cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
+              create an account{" "}
+            </span>
           </p>
         </div>
       </div>
