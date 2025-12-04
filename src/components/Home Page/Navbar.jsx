@@ -10,18 +10,27 @@ import { useNavigate, Link } from "react-router-dom";
 const Navbar = ({ bgColor = true, cart, setCart }) => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (setCart) {
       setCart(savedCart ? JSON.parse(savedCart) : []);
     }
-  }, []);
 
+    const token = localStorage.getItem("authToken");
+    setIsLoggedIn(!!token);
+  }, [setCart]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
   const NavLink = [
     { id: 1, name: "Shop", path: "/shop" },
-    { id: 2, name: "Stories", path:"/stories" },
+    { id: 2, name: "Stories", path: "/stories" },
     { id: 3, name: "About", path: "/about" },
   ];
   function handleNavigate(path) {
@@ -64,19 +73,27 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
             {bgColor === true ? (
               <div className="relative">
                 <img src={Cart} className="" alt="cart" />
-                <span onClick={() =>navigate('/cart')} className="absolute -top-1 left-6 text-[14px] cursor-pointer text-amber-600">
+                <span
+                  onClick={() => navigate("/cart")}
+                  className="absolute -top-1 left-6 text-[14px] cursor-pointer text-amber-600"
+                >
                   {cartCount > 0 && cartCount}
                 </span>
               </div>
             ) : (
               <div className="relative">
                 <img src={CartBlack} className="" alt="cart" />
-                <span onClick={() =>navigate('/cart')} className="absolute -top-1 left-6 text-[14px] cursor-pointer text-amber-600">
+                <span
+                  onClick={() => navigate("/cart")}
+                  className="absolute -top-1 left-6 text-[14px] cursor-pointer text-amber-600"
+                >
                   {cartCount > 0 && cartCount}
                 </span>
               </div>
             )}
-            <p className="text-[17px]" onClick={() => navigate('/login')}>Login</p>
+            <p className="text-[17px]" onClick={() => navigate("/login")}>
+              Login
+            </p>
           </div>
           <div className="md:hidden">
             <button
@@ -108,7 +125,18 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
                       ) : (
                         <img src={CartBlack} alt="cart" />
                       )}
-                      <p className="text-[17px] text-left ml-4" onClick={() => navigate('/login')}>Login</p>
+                      {isLoggedIn ? (
+                        <p className="text-[17px]" onClick={handleLogout}>
+                          Logout
+                        </p>
+                      ) : (
+                        <p
+                          className="text-[17px]"
+                          onClick={() => navigate("/login")}
+                        >
+                          Login
+                        </p>
+                      )}
                     </div>
                   </ul>
                 </div>
