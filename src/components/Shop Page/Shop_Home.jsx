@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
 import { ProductCard } from "./Product";
-import axios from "axios";
+import axiosInstance from "../../api/Axios";
 
 const Shop_Home = () => {
   const [active, setActive] = React.useState("all");
   const [checkedCategories, setCheckedCategories] = React.useState([]);
+  const [products, setProducts] = React.useState([]);
 
   const navigate = useNavigate();
 
   const [sortBy, setSortBy] = React.useState("popular");
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const ProductColor = [
     {
@@ -80,8 +83,8 @@ const Shop_Home = () => {
 
   const FilteredList =
     checkedCategories.length === 0
-      ? ProductCard
-      : ProductCard.filter((item) =>
+      ? products
+      : products.filter((item) =>
           checkedCategories.some(
             (cat) =>
               cat.toLowerCase().replace(/\s+/g, "") ===
@@ -105,6 +108,19 @@ const Shop_Home = () => {
     }
     return 0;
   });
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await axiosInstance.get("/product");
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   return (
     <>

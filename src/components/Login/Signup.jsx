@@ -75,7 +75,7 @@ const Signup = () => {
             if (response.user) {
               localStorage.setItem("user_data", JSON.stringify(response.user));
             }
-            navigate("/");
+            navigate("/dasboard");
           } else {
             setError("No authentication token received");
           }
