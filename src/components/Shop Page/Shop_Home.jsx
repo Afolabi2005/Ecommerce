@@ -241,7 +241,7 @@ const Shop_Home = () => {
             <div className="flex justify-center py-10">
               <button
                 onClick={handleLoadMore}
-                className="px-16 items-center border py-2"
+                className="px-16 items-center bg-white text-black hover:bg-black hover:text-white border py-2"
               >
                 {loading ? "Loading..." : "Load more products"}
               </button>
