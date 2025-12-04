@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
 import axiosInstance from "../../api/Axios";
@@ -110,6 +110,8 @@ const Shop_Home = () => {
     return 0;
   });
 
+  const [productsample, setProoductsample] = useState([])
+
   async function fetchProducts(pageIndex = 0) {
     try {
       setLoading(true);
@@ -117,6 +119,7 @@ const Shop_Home = () => {
         `/products?limit=20&offset=${pageIndex * 20}`
       );
       setProducts((prev) => [...prev, ...response.data]);
+      consle.log(response.data)
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -214,9 +217,9 @@ const Shop_Home = () => {
                 {`Showing ${SortedList.length} Products`}
               </p>
             </div>
-            {SortedList.length > 0 ? (
+            {products.length > 0 ? (
               <div className="grid md:grid-cols-3 items-center gap-4">
-                {SortedList.map((item) => (
+                {products.map((item) => (
                   <div
                     key={item.id}
                     className="cursor-pointer"

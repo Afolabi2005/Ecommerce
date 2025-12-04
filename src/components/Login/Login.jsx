@@ -48,11 +48,11 @@ const Login = () => {
       console.log("Login successful:", response);
 
       // Handle successful login - adjust based on your API response
-      if (response.access_token || response.token) {
+      if (response.data.accessToken || response.token) {
         // Store token
         localStorage.setItem(
           "auth_token",
-          response.access_token || response.token
+          response.data.accessToken || response.token
         );
 
         // Store user data if available
