@@ -114,7 +114,7 @@ const Shop_Home = () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/product?limit=20&offset=${pageIndex * 20}`
+        `/products?limit=20&offset=${pageIndex * 20}`
       );
       setProducts((prev) => [...prev, ...response.data]);
     } catch (error) {
@@ -220,7 +220,7 @@ const Shop_Home = () => {
                   <div
                     key={item.id}
                     className="cursor-pointer"
-                    onClick={() => navigate(`/product/${item.id}`)}
+                    onClick={() => navigate(`/products/${item.id}`)}
                   >
                     <div className="h-[264px] w-[264px] bg-[#c4c4c4] border-none"></div>
                     <div className="mt-4 flex flex-col gap-2">
