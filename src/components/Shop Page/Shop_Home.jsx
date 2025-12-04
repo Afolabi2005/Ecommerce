@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
-import { ProductCard } from "./Product";
 import axiosInstance from "../../api/Axios";
 
 const Shop_Home = () => {
   const [active, setActive] = React.useState("all");
   const [checkedCategories, setCheckedCategories] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
   const [products, setProducts] = React.useState([]);
 
   const navigate = useNavigate();
@@ -109,18 +110,30 @@ const Shop_Home = () => {
     return 0;
   });
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await axiosInstance.get("/product");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
+  async function fetchProducts(pageIndex = 0) {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `/product?limit=20&offset=${pageIndex * 20}`
+      );
+      setProducts((prev) => [...prev, ...response.data]);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchProducts();
+  // ✅ initial load
+  useEffect(() => {
+    fetchProducts(0);
   }, []);
+
+  function handleLoadMore() {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProducts(nextPage);
+  }
 
   return (
     <>
@@ -226,8 +239,11 @@ const Shop_Home = () => {
             )}
 
             <div className="flex justify-center py-10">
-              <button className="px-16 items-center border py-2">
-                Load more products
+              <button
+                onClick={handleLoadMore}
+                className="px-16 items-center border py-2"
+              >
+                {loading ? "Loading..." : "Load more products"}
               </button>
             </div>
           </div>
