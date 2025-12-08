@@ -6,6 +6,7 @@ const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "X-Api-Key": import.meta.env.VITE_API_KEY,
+    "ngrok-skip-browser-warning": "true",
   },
 });
 

@@ -11,6 +11,7 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   React.useEffect(() => {
     const savedCart = localStorage.getItem("cart");
@@ -42,6 +43,12 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
       navigate("/login");
     }
   };
+
+  function handleSearch(e) {
+    if (e.key === "Enter") {
+      navigate(`/search/${searchQuery}`);
+    }
+  }
 
   const NavLink = [
     { id: 1, name: "Shop", path: "/shop" },
@@ -82,7 +89,14 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
             ) : (
               <img src={searchBlack} alt="" />
             )}
-            <p className="text-[17px] -ml-4 text-[#979797]">Search</p>
+            <input
+              onKeyDown={handleSearch}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              type="search"
+              placeholder="Search"
+              className="placeholder:text-[17px] text-[14px] outline-none indent-4 -ml-4 text-[#979797]"
+            />
           </div>
           <div className="md:flex hidden flex-row gap-6">
             {bgColor === true ? (

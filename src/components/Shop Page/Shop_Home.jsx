@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
-import axiosInstance from "../../api/Axios";
+import axiosPublic from "../../api/AxiosPublic";
 
 const Shop_Home = () => {
   const [active, setActive] = React.useState("all");
@@ -13,8 +13,6 @@ const Shop_Home = () => {
   const navigate = useNavigate();
 
   const [sortBy, setSortBy] = React.useState("popular");
-
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const ProductColor = [
     {
@@ -69,6 +67,16 @@ const Shop_Home = () => {
     "Pants & Jeans",
   ];
 
+  const categoryMap = {
+    "T-Shirts": 1,
+    Jackets: 2,
+    Fleece: 3,
+    "Sweatshirts & Hoodies": 4,
+    Sweaters: 5,
+    Shirts: 6,
+    "Pants & Jeans": 7,
+  };
+
   function handleCategories(category) {
     setCheckedCategories((prev) =>
       prev.includes(category)
@@ -86,46 +94,40 @@ const Shop_Home = () => {
     checkedCategories.length === 0
       ? products
       : products.filter((item) =>
-          checkedCategories.some(
-            (cat) =>
-              cat.toLowerCase().replace(/\s+/g, "") ===
-              item.type.replace(/\s+/g, "")
-          )
+          checkedCategories.some((cat) => categoryMap[cat] === item.category)
         );
 
   const SortedList = [...FilteredList].sort((a, b) => {
     if (sortBy === "price") {
-      return (
-        parseInt(b.price.replace("$", "")) - parseInt(a.price.replace("$", ""))
-      );
+      return parseFloat(b.price) - parseFloat(a.price);
     }
     if (sortBy === "priceDown") {
-      return (
-        parseInt(a.price.replace("$", "")) - parseInt(b.price.replace("$", ""))
-      );
+      return parseFloat(a.price) - parseFloat(b.price);
     }
     if (sortBy === "rating") {
-      return b.rating - a.rating;
+      return (b.rating || 0) - (a.rating || 0);
     }
     return 0;
   });
 
-  const [productsample, setProoductsample] = useState([])
-
   async function fetchProducts(pageIndex = 0) {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(
-        `/products?limit=20&offset=${pageIndex * 20}`
+      const response = await axiosPublic.get(
+        `/products/?limit=20&offset=${pageIndex * 20}`
       );
-      setProducts((prev) => [...prev, ...response.data]);
-      consle.log(response.data)
+
+      const newProducts = response.data.results || [];
+      setProducts((prev) => [...prev, ...newProducts]);
+
+      console.log("Fetched products:", newProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
   }
+  console.log(products.map((p) => p.category));
 
   // ✅ initial load
   useEffect(() => {
@@ -183,9 +185,9 @@ const Shop_Home = () => {
               })}
             </div>
             <div className="max-w-[150px] py-4 gap-x-4 gap-y-2 grid grid-cols-5">
-              {ProductColor.map((item) => (
+              {ProductColor.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={`color-${item.id}`}
                   className="w-[25px] h-[25px] rounded-full border"
                   style={{
                     backgroundColor: `${item.color}`,
@@ -217,17 +219,23 @@ const Shop_Home = () => {
                 {`Showing ${SortedList.length} Products`}
               </p>
             </div>
-            {products.length > 0 ? (
+            {SortedList.length > 0 ? (
               <div className="grid md:grid-cols-3 items-center gap-4">
-                {products.map((item) => (
+                {SortedList.map((item, index) => (
                   <div
-                    key={item.id}
+                    key={`product-${item.id}-${index}`}
                     className="cursor-pointer"
                     onClick={() => navigate(`/products/${item.id}`)}
                   >
-                    <div className="h-[264px] w-[264px] bg-[#c4c4c4] border-none"></div>
+                    <div className="h-[264px] w-[264px] bg-[#c4c4c4] border-none">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-[264px] w-[264px] object-cover"
+                      />
+                    </div>
                     <div className="mt-4 flex flex-col gap-2">
-                      <p className="text-[14px] font-semibold">{item.title}</p>
+                      <p className="text-[14px] font-semibold">{item.name}</p>
                       <p className="text-[14px] font-semibold">{item.price}</p>
                     </div>
                   </div>

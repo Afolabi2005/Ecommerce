@@ -1,9 +1,9 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ProductCard } from "./Product";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../../api/Axios";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -11,30 +11,50 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = React.useState(1);
   const [cart, setCart] = React.useState([]);
   const [selectedSize, setSelectedSize] = React.useState(null);
+  const [products, setProducts] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function fetchProduct() {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(`/products/${id}`);
+        setProducts(response.data.data);
+        console.log("Fetched product:", response.data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+      setLoading(false);
+    }
+    fetchProduct();
+  }, [id]);
 
   React.useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     setCart(savedCart ? JSON.parse(savedCart) : []);
   }, []);
 
-  const product = ProductCard.find((p) => p.id === parseInt(id)) || {
+  const productData = products || {
     id: id,
-    title: "Product Not Found",
-    price: "$0",
+    name: "Product Not Found", // ✅ use name instead of title
+    price: "0",
     description: "This product could not be found.",
     image: "",
-    size: ["XS", "S", "M", "L", "XL", "XXL", "3XL"],
+    product_sizes: { XS: {}, S: {}, M: {}, L: {}, XL: {} }, // ✅ match API shape
   };
 
-  const productSize = product.size || ["XS", "S", "M", "L", "XL", "XXL", "3XL"];
+  const productSize = Object.keys(productData.product_sizes || {});
 
   const handleAddToCart = () => {
+    const priceString = String(productData.price || "$0");
     const newItem = {
-      id: product.id,
-      title: product.title,
-      price: parseFloat(product.price.replace("$", "")),
+      id: productData.id,
+      title: productData.name,
+      price: parseFloat(priceString.replace("$", "")),
       quantity,
       size: selectedSize,
+      image: productData.image,
+      description: productData.description,
     };
 
     const existingItemIndex = cart.findIndex(
@@ -51,7 +71,7 @@ const ProductDetail = () => {
 
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    toast.success(`${quantity}× ${product.title} added to cart`, {
+    toast.success(`${quantity}× ${productData.name} added to cart`, {
       position: "top-right",
       autoClose: 2500,
       hideProgressBar: false,
@@ -61,7 +81,19 @@ const ProductDetail = () => {
     setQuantity(1);
   };
 
-  const totalPrice = parseFloat(product.price.replace("$", "")) * quantity;
+  const priceString = String(productData.price || "$0");
+  const totalPrice = parseFloat(priceString.replace("$", "")) * quantity;
+
+  if (loading) {
+    return (
+      <div className="public-sans">
+        <Navbar bgColor={false} cart={cart} setCart={setCart} />
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-lg font-semibold">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="public-sans">
@@ -76,8 +108,11 @@ const ProductDetail = () => {
               key={i}
               className="w-[180px] h-[180px] bg-[#c4c4c4] flex items-center justify-center"
             >
-              {product.image ? (
-                <img src={product.image} alt={`${product.title} ${i}`} />
+              {productData.image ? (
+                <img
+                  src={productData.image}
+                  alt={`${productData.title} ${i}`}
+                />
               ) : (
                 <span className="text-gray-500"></span>
               )}
@@ -88,11 +123,11 @@ const ProductDetail = () => {
         {/* Product Details */}
         <div className="flex flex-col max-w-[500px]">
           <h1 className="public-sans text-[36px] font-semibold tracking-[-1.5px]">
-            {product.title}
+            {productData.name}
           </h1>
-          <p className="text-[18px] font-semibold mt-2">{product.price}</p>
+          <p className="text-[18px] font-semibold mt-2">{productData.price}</p>
           <p className="text-[18px] mt-4 text-gray-700">
-            {product.description}
+            {productData.description}
           </p>
 
           {/* Size Selection */}

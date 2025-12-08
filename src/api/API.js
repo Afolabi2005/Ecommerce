@@ -14,11 +14,11 @@ export const loginUser = async (credentials) => {
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
-        "X-Api-Key": import.meta.env.VITE_API_KEY, // ✅ include API key
+        "X-Api-Key": import.meta.env.VITE_API_KEY, 
       },
       body: JSON.stringify({
-        requestType: "inbound", // ✅ required field
-        data: credentials, // ✅ wrap user data inside "data"
+        requestType: "inbound", 
+        data: credentials, 
       }),
     });
 
@@ -43,11 +43,11 @@ export const signupUser = async (credentials) => {
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
-        "X-Api-Key": import.meta.env.VITE_API_KEY, // backend requires this
+        "X-Api-Key": import.meta.env.VITE_API_KEY,
       },
       body: JSON.stringify({
-        requestType: "inbound", // ✅ required field
-        data: credentials, // ✅ wrap user data inside "data"
+        requestType: "inbound",
+        data: credentials,
       }),
     });
 

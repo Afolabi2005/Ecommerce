@@ -67,7 +67,15 @@ const Cart = () => {
                     key={`${item.id}-${item.size}-${idx}`}
                     className="flex gap-4 py-4 border-b"
                   >
-                    <div className="w-[150px] h-[150px] bg-[#c4c4c4]"></div>
+                    <div className="w-[150px] h-[150px] bg-[#c4c4c4]">
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg">{item.title}</h3>
                       <p className="text-gray-600">Size: {item.size}</p>
@@ -159,7 +167,10 @@ const Cart = () => {
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
               </div>
-              <button onClick={() => navigate('/address')} className="w-full bg-black text-white py-3 font-semibold hover:bg-gray-800">
+              <button
+                onClick={() => navigate("/address")}
+                className="w-full bg-black text-white py-3 font-semibold hover:bg-gray-800"
+              >
                 Continue to checkout
               </button>
             </div>
