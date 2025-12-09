@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './Navbar'
 import { useNavigate } from 'react-router-dom'
+import Footer from './Footer'
 
 const Stories = () => {
     const navigate = useNavigate()
@@ -16,6 +17,7 @@ const Stories = () => {
               Back to Home
             </button>
           </div>
+      <Footer />
     </div>
   )
 }

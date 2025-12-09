@@ -12,6 +12,9 @@ import Stories from "./components/Home Page/Stories";
 import About from "./components/Home Page/About";
 import Login from "./components/Login/Login";
 import Signup from "./components/Login/Signup";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Dashboard from "./components/Vendor Page/Dashboard";
 
 function App() {
   return (
@@ -19,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop_Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/stories" element={<Stories />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
@@ -29,6 +33,18 @@ function App() {
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/checkout" element={<Payment />} />
       </Routes>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

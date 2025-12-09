@@ -45,8 +45,8 @@ const Navbar = ({ bgColor = true, cart, setCart }) => {
   };
 
   function handleSearch(e) {
-    if (e.key === "Enter") {
-      navigate(`/search/${searchQuery}`);
+    if (e.key === "Enter" && searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
     }
   }
 

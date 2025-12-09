@@ -2,6 +2,8 @@ import React, { useState} from "react";
 import Navbar from "../Home Page/Navbar";
 import { signupUser } from "../../api/API";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -64,6 +66,19 @@ const Signup = () => {
     
           console.log("Signup successful:", response);
     
+          toast.success("Signup successful", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate('/login')
+
+    
           
           if (response.access_token || response.token) {
 
@@ -90,6 +105,7 @@ const Signup = () => {
   return (
     <>
       <Navbar bgColor={false} />
+      <ToastContainer />
       <div className="flex flex-col h-screen justify-center items-center">
         <p className="text-[36px] font-bold tracking-tight pb-4">Register</p>
         <form
@@ -210,7 +226,7 @@ const Signup = () => {
             type="submit"
             className="w-full outline-none text-[16px] font-semibold indent-4 border border-[#A9ABBD] bg-black text-white py-3 px-2"
           >
-            Sign Up
+            {isLoading ? "Signing Up..." : "Sign up"}
           </button>
         </form>
         <p

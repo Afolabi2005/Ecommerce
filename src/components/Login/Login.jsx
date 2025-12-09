@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Navbar from "../Home Page/Navbar";
 import { loginUser } from "../../api/API";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,13 +48,17 @@ const Login = () => {
 
       console.log("Login successful:", response);
 
-      // Handle successful login - adjust based on your API response
+      toast.success("Login successful, redirecting...", {});
+
       if (response.data && response.data.accessToken) {
         localStorage.setItem("auth_token", response.data.accessToken);
         localStorage.setItem(
           "user_data",
           JSON.stringify(response.data.userData)
         );
+        if (response.data.userData.role.toLowerCase() === "vendor") {
+          navigate("/dashboard");
+        }
         navigate("/");
       } else {
         setError("No authentication token received");

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../Home Page/Navbar";
+import Footer from "../Home Page/Footer";
 import axiosPublic from "../../api/AxiosPublic";
 
 const Shop_Home = () => {
-  const [active, setActive] = React.useState("all");
-  const [checkedCategories, setCheckedCategories] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
-  const [products, setProducts] = React.useState([]);
+  const [active, setActive] = useState("all");
+  const [checkedCategories, setCheckedCategories] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
 
   const navigate = useNavigate();
 
-  const [sortBy, setSortBy] = React.useState("popular");
+  const [sortBy, setSortBy] = useState("popular");
 
   const ProductColor = [
     {
@@ -77,6 +78,12 @@ const Shop_Home = () => {
     "Pants & Jeans": 7,
   };
 
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+
+  const query = useQuery().get("search");
+
   function handleCategories(category) {
     setCheckedCategories((prev) =>
       prev.includes(category)
@@ -90,12 +97,18 @@ const Shop_Home = () => {
     setActive("all");
   }
 
-  const FilteredList =
-    checkedCategories.length === 0
-      ? products
-      : products.filter((item) =>
-          checkedCategories.some((cat) => categoryMap[cat] === item.category)
-        );
+  const FilteredList = products.filter((item) => {
+    const matchesCategory =
+      checkedCategories.length === 0 ||
+      checkedCategories.some((cat) => categoryMap[cat] === item.category);
+
+    const matchesSearch =
+      !query ||
+      item.name.toLowerCase().includes(query.toLowerCase()) ||
+      item.description?.toLowerCase().includes(query.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
 
   const SortedList = [...FilteredList].sort((a, b) => {
     if (sortBy === "price") {
@@ -110,11 +123,11 @@ const Shop_Home = () => {
     return 0;
   });
 
-  async function fetchProducts(pageIndex = 0) {
+  async function fetchProducts(pageIndex = 0, searchTerm = "") {
     try {
       setLoading(true);
       const response = await axiosPublic.get(
-        `/products/?limit=20&offset=${pageIndex * 20}`
+        `/products/?limit=20&offset=${pageIndex * 20}&search=${searchTerm}`
       );
 
       const newProducts = response.data.results || [];
@@ -129,10 +142,11 @@ const Shop_Home = () => {
   }
   console.log(products.map((p) => p.category));
 
-  // ✅ initial load
   useEffect(() => {
-    fetchProducts(0);
-  }, []);
+    setProducts([]);
+    setPage(0);
+    fetchProducts(0, query || "");
+  }, [query]);
 
   function handleLoadMore() {
     const nextPage = page + 1;
@@ -260,6 +274,7 @@ const Shop_Home = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

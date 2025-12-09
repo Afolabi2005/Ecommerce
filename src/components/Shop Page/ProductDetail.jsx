@@ -4,6 +4,7 @@ import Navbar from "../Home Page/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../api/Axios";
+import Footer from "../Home Page/Footer";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -181,6 +182,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

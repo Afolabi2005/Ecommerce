@@ -3,8 +3,11 @@ import NYT from '../../assets/NYTimes.svg'
 import Vogue from "../../assets/Vogue.svg";
 import VanityFair from "../../assets/VanityFair.svg";
 import CNimg from "../../assets/CNimg.svg";
+import bgEcommerce from "../../assets/bg-ecommerce.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <div className="public-sans">
       <div className="py-10 flex justify-center items-center text-center flex-col gap-4">
@@ -15,10 +18,10 @@ const Hero = () => {
           Create screens directly in Method or add your images from Sketch or
           Figma. You can even sync designs from your cloud storage!
         </p>
-        <button className="py-3 px-14 text-[16px] font-semibold border">
+        <button onClick={() => navigate("/shop")} className="py-3 cursor-pointer px-14 text-[16px] font-semibold border">
           Shop All
         </button>
-        <div className="h-[521px] w-screen md:w-[1114px] bg-[#c4c4c4] border mt-4"></div>
+        <img className="h-[521px] w-screen md:w-[1114px] object-cover bg-[#c4c4c4] border mt-4" src={bgEcommerce} alt="" />
         <div className="grid grid-cols-2 md:grid-cols-4 justify-bwteen px-4 md:px-0 items-center gap-12 mt-4">
           <img src={NYT} alt="" />
           <img src={Vogue} alt="" />
