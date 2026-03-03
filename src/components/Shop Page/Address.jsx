@@ -244,7 +244,23 @@ const Address = () => {
                   key={`${item.id}-${item.size}-${idx}`}
                   className="flex gap-4 py-4 border-b"
                 >
-                  <div className="w-[150px] h-[150px] bg-[#c4c4c4]"></div>
+                  <div className="w-[150px] h-[150px] bg-[#c4c4c4]">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = '/path/to/placeholder.png'; // fallback
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-sm text-gray-500">
+                        No image
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     <p className="text-gray-600">Size: {item.size}</p>

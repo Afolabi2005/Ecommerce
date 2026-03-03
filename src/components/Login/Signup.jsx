@@ -20,6 +20,8 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -174,30 +176,48 @@ const Signup = () => {
             <p className="text-red-500 text-sm">{errors.email}</p>
           )}
 
-          <input
-            type="password"
-            value={signupInfo.password}
-            onChange={(e) =>
-              setSignupInfo((s) => ({ ...s, password: e.target.value }))
-            }
-            placeholder="Password"
-            disabled={isLoading}
-            className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={signupInfo.password}
+              onChange={(e) =>
+                setSignupInfo((s) => ({ ...s, password: e.target.value }))
+              }
+              placeholder="Password"
+              disabled={isLoading}
+              className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2 pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[12px] text-gray-500"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password}</p>
           )}
 
-          <input
-            type="password"
-            value={signupInfo.confirmPassword}
-            onChange={(e) =>
-              setSignupInfo((s) => ({ ...s, confirmPassword: e.target.value }))
-            }
-            placeholder="Confirm Password"
-            disabled={isLoading}
-            className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2"
-          />
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              value={signupInfo.confirmPassword}
+              onChange={(e) =>
+                setSignupInfo((s) => ({ ...s, confirmPassword: e.target.value }))
+              }
+              placeholder="Confirm Password"
+              disabled={isLoading}
+              className="w-full outline-none h-10 text-[14px] font-normal indent-4 border border-[#A9ABBD] text-black py-4 px-2 pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[12px] text-gray-500"
+            >
+              {showConfirmPassword ? "Hide" : "Show"}
+            </button>
+          </div>
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
           )}
